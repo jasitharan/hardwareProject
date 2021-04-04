@@ -17,10 +17,11 @@
 
 // Servo Motors Pins
 #define TEMP_SENSOR 0b00000000
-#define OXY_SENSOR 0b00000010
-#define HEART_SENSOR 0b00000001
-#define ECG_SENSOR 0b00000011
-
+#define OXY_SENSOR 0b00000001
+#define HEART_SENSOR 0b00000011
+#define ECG_SENSOR 0b00000010
+#define GSM_SENSOR 0b00000100
+#define MEDI_BOX 0b01000101
 
 
 int age = 0;  // Age
@@ -132,44 +133,54 @@ void getAge()
 		  case BTN_0:
 		  sensorInstruction("PlaceYourFinger");
 		  // Push The Sensor code
-		  pushSensor();
-		  
+		 pushSensor(TEMP_SENSOR);
+		 // _delay_ms(5000);
+		  //pushSensor(GSM_SENSOR);
 		  // Temperature Sensor Code 
 		  
 		  
 		 _delay_ms(10000);
-          pullSensor();
+          pullSensor(TEMP_SENSOR);
+		//  pullSensor(GSM_SENSOR);
 		  break;
 		  case BTN_1:
 		  sensorInstruction("PlaceYourThump");
 		  // Push The Sensor code
-		//  pushSensor(OXY_SENSOR);
+		 pushSensor(OXY_SENSOR);
 		  // Oxygen Saturation Code
+		 //  _delay_ms(5000);
+	//	   pushSensor(GSM_SENSOR);
 		  
 		 //  _delay_ms(10000);
 		//   pushSensor(OXY_SENSOR);
+		_delay_ms(10000);
+		pullSensor(OXY_SENSOR);
 		  break;
 		  case BTN_2:
 		  sensorInstruction("PlaceYourThump");
 		  // Push The Sensor code
-		//  pushSensor(ECG_SENSOR);
+		pushSensor(ECG_SENSOR);
 		  
 		  // ECG Code
 		  
 		  
-		//   _delay_ms(10000);
-		 //  pushSensor(ECG_SENSOR);
+		 _delay_ms(10000);
+		 // pushSensor(ECG_SENSOR);
+		 //_delay_ms(10000);
+		 pullSensor(ECG_SENSOR);
 		  break;
 		  case BTN_3:
 		  sensorInstruction("Putitonyourchest");
 		  // Push The Sensor code
-		 // pushSensor(HEART_SENSOR);
+		  pushSensor(HEART_SENSOR);
 		  
 		  // Heart Rate Code
 		  
 		  
-		//   _delay_ms(10000);
-		 //  pushSensor(HEART_SENSOR);
+		// _delay_ms(10000);
+		// pushSensor(HEART_SENSOR);
+		 _delay_ms(10000);
+		 pullSensor(HEART_SENSOR);
 		  break;
 	      default:
 		  lcd_clear();
@@ -194,46 +205,38 @@ void getAge()
   
 	  
 
-  void pushSensor()
+  void pushSensor(int n)
   {
-	DDRD = 0b00111100;
-	PORTD = 0b00001100;
 	
-	//Configure TIMER1
-	TCCR1A|=(1<<COM1A1)|(1<<COM1B1)|(1<<WGM11);        //NON Inverted PWM
-	TCCR1B|=(1<<WGM13)|(1<<WGM12)|(1<<CS11)|(1<<CS10); //PRESCALER=64 MODE 14(FAST PWM)
+	  DDRD = (1<<PD5);	/* Make OC1A pin as output */
+	  PORTD = n;
+	  
+	  TCNT1 = 0;		/* Set timer1 count zero */
+	  ICR1 = 2499;		/* Set TOP count for timer1 in ICR1 register */
 
-	ICR1=4999;  //fPWM=50Hz (Period = 20ms Standard).
-
-	DDRD|=(1<<PD4)|(1<<PD5);   //PWM Pins as Out
-
-		OCR1A=97;   //0 degree
-		delay(500);
-
-		OCR1A=316;  //90 degree
-		delay(500);
-
-		OCR1A=425;  //135 degree
-		delay(500);
-
-		OCR1A=535;  //180 degree
-		delay(500);
+	  /* Set Fast PWM, TOP in ICR1, Clear OC1A on compare match, clk/64 */
+          TCCR1A = (1<<WGM11)|(1<<COM1A1);
+	      TCCR1B = (1<<WGM12)|(1<<WGM13)|(1<<CS10)|(1<<CS11);
+	  
+		  OCR1A = 65;	/* Set servo shaft at 0° position */
+		  _delay_ms(1500);
+		  OCR1A = 175;	/* Set servo shaft at 90° position */
+		  _delay_ms(1500);
+		  OCR1A = 300;	/* Set servo at +180° position */
+		  _delay_ms(1500);
   }
 	  
+
 	  
 	  
-void pullSensor()
+void pullSensor(int n)
 {
-	OCR1A=535;  //180 degree
-	delay(500);
-	
-	OCR1A=425;  //135 degree
-	delay(500);
-	
-	
-	OCR1A=316;  //90 degree
-	delay(500);
-	
-	OCR1A=97;   //0 degree
-	delay(500);
+	  PORTD = n;
+
+	  OCR1A = 300;	/* Set servo at +180° position */
+	  _delay_ms(1500);
+	  OCR1A = 175;	/* Set servo shaft at 90° position */
+	 _delay_ms(1500);
+	  OCR1A = 65;	/* Set servo shaft at 0° position */
+	  _delay_ms(1500);
 }

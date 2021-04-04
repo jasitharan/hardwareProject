@@ -3,31 +3,31 @@ Mobile_Medi_Box.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000007ba  00000000  00000000  00000094  2**1
+  0 .text         00000852  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         000000a0  00800060  000007ba  0000084e  2**0
+  1 .data         000000a0  00800060  00000852  000008e6  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          0000000b  00800100  00800100  000008ee  2**0
+  2 .bss          0000000b  00800100  00800100  00000986  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000008ee  2**0
+  3 .comment      00000030  00000000  00000000  00000986  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000920  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000009b8  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000f0  00000000  00000000  0000095c  2**0
+  5 .debug_aranges 000000f0  00000000  00000000  000009f4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000011d9  00000000  00000000  00000a4c  2**0
+  6 .debug_info   000013f8  00000000  00000000  00000ae4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000006c0  00000000  00000000  00001c25  2**0
+  7 .debug_abbrev 000006cf  00000000  00000000  00001edc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   0000097b  00000000  00000000  000022e5  2**0
+  8 .debug_line   000009cf  00000000  00000000  000025ab  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000228  00000000  00000000  00002c60  2**2
+  9 .debug_frame  00000228  00000000  00000000  00002f7c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000046b  00000000  00000000  00002e88  2**0
+ 10 .debug_str    0000046b  00000000  00000000  000031a4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000007da  00000000  00000000  000032f3  2**0
+ 11 .debug_loc    00000af6  00000000  00000000  0000360f  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000e0  00000000  00000000  00003acd  2**0
+ 12 .debug_ranges 000000e0  00000000  00000000  00004105  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -87,8 +87,8 @@ Disassembly of section .text:
   88:	11 e0       	ldi	r17, 0x01	; 1
   8a:	a0 e6       	ldi	r26, 0x60	; 96
   8c:	b0 e0       	ldi	r27, 0x00	; 0
-  8e:	ea eb       	ldi	r30, 0xBA	; 186
-  90:	f7 e0       	ldi	r31, 0x07	; 7
+  8e:	e2 e5       	ldi	r30, 0x52	; 82
+  90:	f8 e0       	ldi	r31, 0x08	; 8
   92:	02 c0       	rjmp	.+4      	; 0x98 <__do_copy_data+0x10>
   94:	05 90       	lpm	r0, Z+
   96:	0d 92       	st	X+, r0
@@ -109,8 +109,8 @@ Disassembly of section .text:
   a8:	ab 30       	cpi	r26, 0x0B	; 11
   aa:	b2 07       	cpc	r27, r18
   ac:	e1 f7       	brne	.-8      	; 0xa6 <.do_clear_bss_loop>
-  ae:	0e 94 8d 03 	call	0x71a	; 0x71a <main>
-  b2:	0c 94 db 03 	jmp	0x7b6	; 0x7b6 <_exit>
+  ae:	0e 94 d9 03 	call	0x7b2	; 0x7b2 <main>
+  b2:	0c 94 27 04 	jmp	0x84e	; 0x84e <_exit>
 
 000000b6 <__bad_interrupt>:
   b6:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -305,7 +305,7 @@ void lcd_lef_sh()
  25c:	fc 01       	movw	r30, r24
  25e:	e6 5d       	subi	r30, 0xD6	; 214
  260:	ff 4f       	sbci	r31, 0xFF	; 255
- 262:	0c 94 d5 03 	jmp	0x7aa	; 0x7aa <__tablejump2__>
+ 262:	0c 94 21 04 	jmp	0x842	; 0x842 <__tablejump2__>
  266:	81 e3       	ldi	r24, 0x31	; 49
  268:	08 95       	ret
  26a:	82 e3       	ldi	r24, 0x32	; 50
@@ -806,355 +806,432 @@ void getAge()
  5c6:	08 95       	ret
 
 000005c8 <pushSensor>:
-  
 	  
 
-  void pushSensor()
+  void pushSensor(int n)
   {
-	DDRD = 0b00111100;
- 5c8:	8c e3       	ldi	r24, 0x3C	; 60
- 5ca:	81 bb       	out	0x11, r24	; 17
-	PORTD = 0b00001100;
- 5cc:	8c e0       	ldi	r24, 0x0C	; 12
- 5ce:	82 bb       	out	0x12, r24	; 18
 	
-	//Configure TIMER1
-	TCCR1A|=(1<<COM1A1)|(1<<COM1B1)|(1<<WGM11);        //NON Inverted PWM
- 5d0:	8f b5       	in	r24, 0x2f	; 47
- 5d2:	82 6a       	ori	r24, 0xA2	; 162
- 5d4:	8f bd       	out	0x2f, r24	; 47
-	TCCR1B|=(1<<WGM13)|(1<<WGM12)|(1<<CS11)|(1<<CS10); //PRESCALER=64 MODE 14(FAST PWM)
- 5d6:	8e b5       	in	r24, 0x2e	; 46
- 5d8:	8b 61       	ori	r24, 0x1B	; 27
- 5da:	8e bd       	out	0x2e, r24	; 46
+	  DDRD = (1<<PD5);	/* Make OC1A pin as output */
+ 5c8:	90 e2       	ldi	r25, 0x20	; 32
+ 5ca:	91 bb       	out	0x11, r25	; 17
+	  PORTD = n;
+ 5cc:	82 bb       	out	0x12, r24	; 18
+	  
+	  TCNT1 = 0;		/* Set timer1 count zero */
+ 5ce:	1d bc       	out	0x2d, r1	; 45
+ 5d0:	1c bc       	out	0x2c, r1	; 44
+	  ICR1 = 2499;		/* Set TOP count for timer1 in ICR1 register */
+ 5d2:	83 ec       	ldi	r24, 0xC3	; 195
+ 5d4:	99 e0       	ldi	r25, 0x09	; 9
+ 5d6:	97 bd       	out	0x27, r25	; 39
+ 5d8:	86 bd       	out	0x26, r24	; 38
 
-	ICR1=4999;  //fPWM=50Hz (Period = 20ms Standard).
- 5dc:	87 e8       	ldi	r24, 0x87	; 135
- 5de:	93 e1       	ldi	r25, 0x13	; 19
- 5e0:	97 bd       	out	0x27, r25	; 39
- 5e2:	86 bd       	out	0x26, r24	; 38
+	  /* Set Fast PWM, TOP in ICR1, Clear OC1A on compare match, clk/64 */
+          TCCR1A = (1<<WGM11)|(1<<COM1A1);
+ 5da:	82 e8       	ldi	r24, 0x82	; 130
+ 5dc:	8f bd       	out	0x2f, r24	; 47
+	      TCCR1B = (1<<WGM12)|(1<<WGM13)|(1<<CS10)|(1<<CS11);
+ 5de:	8b e1       	ldi	r24, 0x1B	; 27
+ 5e0:	8e bd       	out	0x2e, r24	; 46
+	  
+		  OCR1A = 65;	/* Set servo shaft at 0° position */
+ 5e2:	81 e4       	ldi	r24, 0x41	; 65
+ 5e4:	90 e0       	ldi	r25, 0x00	; 0
+ 5e6:	9b bd       	out	0x2b, r25	; 43
+ 5e8:	8a bd       	out	0x2a, r24	; 42
+ 5ea:	2f ef       	ldi	r18, 0xFF	; 255
+ 5ec:	8e e9       	ldi	r24, 0x9E	; 158
+ 5ee:	94 e2       	ldi	r25, 0x24	; 36
+ 5f0:	21 50       	subi	r18, 0x01	; 1
+ 5f2:	80 40       	sbci	r24, 0x00	; 0
+ 5f4:	90 40       	sbci	r25, 0x00	; 0
+ 5f6:	e1 f7       	brne	.-8      	; 0x5f0 <pushSensor+0x28>
+ 5f8:	00 c0       	rjmp	.+0      	; 0x5fa <pushSensor+0x32>
+ 5fa:	00 00       	nop
+		  _delay_ms(1500);
+		  OCR1A = 175;	/* Set servo shaft at 90° position */
+ 5fc:	8f ea       	ldi	r24, 0xAF	; 175
+ 5fe:	90 e0       	ldi	r25, 0x00	; 0
+ 600:	9b bd       	out	0x2b, r25	; 43
+ 602:	8a bd       	out	0x2a, r24	; 42
+ 604:	2f ef       	ldi	r18, 0xFF	; 255
+ 606:	8e e9       	ldi	r24, 0x9E	; 158
+ 608:	94 e2       	ldi	r25, 0x24	; 36
+ 60a:	21 50       	subi	r18, 0x01	; 1
+ 60c:	80 40       	sbci	r24, 0x00	; 0
+ 60e:	90 40       	sbci	r25, 0x00	; 0
+ 610:	e1 f7       	brne	.-8      	; 0x60a <pushSensor+0x42>
+ 612:	00 c0       	rjmp	.+0      	; 0x614 <pushSensor+0x4c>
+ 614:	00 00       	nop
+		  _delay_ms(1500);
+		  OCR1A = 300;	/* Set servo at +180° position */
+ 616:	8c e2       	ldi	r24, 0x2C	; 44
+ 618:	91 e0       	ldi	r25, 0x01	; 1
+ 61a:	9b bd       	out	0x2b, r25	; 43
+ 61c:	8a bd       	out	0x2a, r24	; 42
+ 61e:	2f ef       	ldi	r18, 0xFF	; 255
+ 620:	8e e9       	ldi	r24, 0x9E	; 158
+ 622:	94 e2       	ldi	r25, 0x24	; 36
+ 624:	21 50       	subi	r18, 0x01	; 1
+ 626:	80 40       	sbci	r24, 0x00	; 0
+ 628:	90 40       	sbci	r25, 0x00	; 0
+ 62a:	e1 f7       	brne	.-8      	; 0x624 <pushSensor+0x5c>
+ 62c:	00 c0       	rjmp	.+0      	; 0x62e <pushSensor+0x66>
+ 62e:	00 00       	nop
+ 630:	08 95       	ret
 
-	DDRD|=(1<<PD4)|(1<<PD5);   //PWM Pins as Out
- 5e4:	81 b3       	in	r24, 0x11	; 17
- 5e6:	80 63       	ori	r24, 0x30	; 48
- 5e8:	81 bb       	out	0x11, r24	; 17
+00000632 <pullSensor>:
 
-		OCR1A=97;   //0 degree
- 5ea:	81 e6       	ldi	r24, 0x61	; 97
- 5ec:	90 e0       	ldi	r25, 0x00	; 0
- 5ee:	9b bd       	out	0x2b, r25	; 43
- 5f0:	8a bd       	out	0x2a, r24	; 42
-		delay(500);
- 5f2:	84 ef       	ldi	r24, 0xF4	; 244
- 5f4:	91 e0       	ldi	r25, 0x01	; 1
- 5f6:	0e 94 5c 01 	call	0x2b8	; 0x2b8 <delay>
-
-		OCR1A=316;  //90 degree
- 5fa:	8c e3       	ldi	r24, 0x3C	; 60
- 5fc:	91 e0       	ldi	r25, 0x01	; 1
- 5fe:	9b bd       	out	0x2b, r25	; 43
- 600:	8a bd       	out	0x2a, r24	; 42
-		delay(500);
- 602:	84 ef       	ldi	r24, 0xF4	; 244
- 604:	91 e0       	ldi	r25, 0x01	; 1
- 606:	0e 94 5c 01 	call	0x2b8	; 0x2b8 <delay>
-
-		OCR1A=425;  //135 degree
- 60a:	89 ea       	ldi	r24, 0xA9	; 169
- 60c:	91 e0       	ldi	r25, 0x01	; 1
- 60e:	9b bd       	out	0x2b, r25	; 43
- 610:	8a bd       	out	0x2a, r24	; 42
-		delay(500);
- 612:	84 ef       	ldi	r24, 0xF4	; 244
- 614:	91 e0       	ldi	r25, 0x01	; 1
- 616:	0e 94 5c 01 	call	0x2b8	; 0x2b8 <delay>
-
-		OCR1A=535;  //180 degree
- 61a:	87 e1       	ldi	r24, 0x17	; 23
- 61c:	92 e0       	ldi	r25, 0x02	; 2
- 61e:	9b bd       	out	0x2b, r25	; 43
- 620:	8a bd       	out	0x2a, r24	; 42
-		delay(500);
- 622:	84 ef       	ldi	r24, 0xF4	; 244
- 624:	91 e0       	ldi	r25, 0x01	; 1
- 626:	0e 94 5c 01 	call	0x2b8	; 0x2b8 <delay>
- 62a:	08 95       	ret
-
-0000062c <pullSensor>:
 	  
 	  
-	  
-void pullSensor()
+void pullSensor(int n)
 {
-	OCR1A=535;  //180 degree
- 62c:	87 e1       	ldi	r24, 0x17	; 23
- 62e:	92 e0       	ldi	r25, 0x02	; 2
- 630:	9b bd       	out	0x2b, r25	; 43
- 632:	8a bd       	out	0x2a, r24	; 42
-	delay(500);
- 634:	84 ef       	ldi	r24, 0xF4	; 244
- 636:	91 e0       	ldi	r25, 0x01	; 1
- 638:	0e 94 5c 01 	call	0x2b8	; 0x2b8 <delay>
-	
-	OCR1A=425;  //135 degree
- 63c:	89 ea       	ldi	r24, 0xA9	; 169
- 63e:	91 e0       	ldi	r25, 0x01	; 1
- 640:	9b bd       	out	0x2b, r25	; 43
- 642:	8a bd       	out	0x2a, r24	; 42
-	delay(500);
- 644:	84 ef       	ldi	r24, 0xF4	; 244
- 646:	91 e0       	ldi	r25, 0x01	; 1
- 648:	0e 94 5c 01 	call	0x2b8	; 0x2b8 <delay>
-	
-	
-	OCR1A=316;  //90 degree
- 64c:	8c e3       	ldi	r24, 0x3C	; 60
- 64e:	91 e0       	ldi	r25, 0x01	; 1
- 650:	9b bd       	out	0x2b, r25	; 43
- 652:	8a bd       	out	0x2a, r24	; 42
-	delay(500);
- 654:	84 ef       	ldi	r24, 0xF4	; 244
- 656:	91 e0       	ldi	r25, 0x01	; 1
- 658:	0e 94 5c 01 	call	0x2b8	; 0x2b8 <delay>
-	
-	OCR1A=97;   //0 degree
- 65c:	81 e6       	ldi	r24, 0x61	; 97
- 65e:	90 e0       	ldi	r25, 0x00	; 0
- 660:	9b bd       	out	0x2b, r25	; 43
- 662:	8a bd       	out	0x2a, r24	; 42
-	delay(500);
- 664:	84 ef       	ldi	r24, 0xF4	; 244
- 666:	91 e0       	ldi	r25, 0x01	; 1
- 668:	0e 94 5c 01 	call	0x2b8	; 0x2b8 <delay>
- 66c:	08 95       	ret
+	  PORTD = n;
+ 632:	82 bb       	out	0x12, r24	; 18
 
-0000066e <sensor>:
+	  OCR1A = 300;	/* Set servo at +180° position */
+ 634:	8c e2       	ldi	r24, 0x2C	; 44
+ 636:	91 e0       	ldi	r25, 0x01	; 1
+ 638:	9b bd       	out	0x2b, r25	; 43
+ 63a:	8a bd       	out	0x2a, r24	; 42
+ 63c:	2f ef       	ldi	r18, 0xFF	; 255
+ 63e:	8e e9       	ldi	r24, 0x9E	; 158
+ 640:	94 e2       	ldi	r25, 0x24	; 36
+ 642:	21 50       	subi	r18, 0x01	; 1
+ 644:	80 40       	sbci	r24, 0x00	; 0
+ 646:	90 40       	sbci	r25, 0x00	; 0
+ 648:	e1 f7       	brne	.-8      	; 0x642 <pullSensor+0x10>
+ 64a:	00 c0       	rjmp	.+0      	; 0x64c <pullSensor+0x1a>
+ 64c:	00 00       	nop
+	  _delay_ms(1500);
+	  OCR1A = 175;	/* Set servo shaft at 90° position */
+ 64e:	8f ea       	ldi	r24, 0xAF	; 175
+ 650:	90 e0       	ldi	r25, 0x00	; 0
+ 652:	9b bd       	out	0x2b, r25	; 43
+ 654:	8a bd       	out	0x2a, r24	; 42
+ 656:	2f ef       	ldi	r18, 0xFF	; 255
+ 658:	8e e9       	ldi	r24, 0x9E	; 158
+ 65a:	94 e2       	ldi	r25, 0x24	; 36
+ 65c:	21 50       	subi	r18, 0x01	; 1
+ 65e:	80 40       	sbci	r24, 0x00	; 0
+ 660:	90 40       	sbci	r25, 0x00	; 0
+ 662:	e1 f7       	brne	.-8      	; 0x65c <pullSensor+0x2a>
+ 664:	00 c0       	rjmp	.+0      	; 0x666 <pullSensor+0x34>
+ 666:	00 00       	nop
+	 _delay_ms(1500);
+	  OCR1A = 65;	/* Set servo shaft at 0° position */
+ 668:	81 e4       	ldi	r24, 0x41	; 65
+ 66a:	90 e0       	ldi	r25, 0x00	; 0
+ 66c:	9b bd       	out	0x2b, r25	; 43
+ 66e:	8a bd       	out	0x2a, r24	; 42
+ 670:	2f ef       	ldi	r18, 0xFF	; 255
+ 672:	8e e9       	ldi	r24, 0x9E	; 158
+ 674:	94 e2       	ldi	r25, 0x24	; 36
+ 676:	21 50       	subi	r18, 0x01	; 1
+ 678:	80 40       	sbci	r24, 0x00	; 0
+ 67a:	90 40       	sbci	r25, 0x00	; 0
+ 67c:	e1 f7       	brne	.-8      	; 0x676 <pullSensor+0x44>
+ 67e:	00 c0       	rjmp	.+0      	; 0x680 <pullSensor+0x4e>
+ 680:	00 00       	nop
+ 682:	08 95       	ret
+
+00000684 <sensor>:
   
  
   
   void sensor()
   {
 	  delay(500);
- 66e:	84 ef       	ldi	r24, 0xF4	; 244
- 670:	91 e0       	ldi	r25, 0x01	; 1
- 672:	0e 94 5c 01 	call	0x2b8	; 0x2b8 <delay>
+ 684:	84 ef       	ldi	r24, 0xF4	; 244
+ 686:	91 e0       	ldi	r25, 0x01	; 1
+ 688:	0e 94 5c 01 	call	0x2b8	; 0x2b8 <delay>
 	  lcd_msg("Select: ");
- 676:	8f e8       	ldi	r24, 0x8F	; 143
- 678:	90 e0       	ldi	r25, 0x00	; 0
- 67a:	0e 94 19 02 	call	0x432	; 0x432 <lcd_msg>
+ 68c:	8f e8       	ldi	r24, 0x8F	; 143
+ 68e:	90 e0       	ldi	r25, 0x00	; 0
+ 690:	0e 94 19 02 	call	0x432	; 0x432 <lcd_msg>
 	  lcd_2ndline();
- 67e:	0e 94 30 02 	call	0x460	; 0x460 <lcd_2ndline>
+ 694:	0e 94 30 02 	call	0x460	; 0x460 <lcd_2ndline>
 	  lcd_msg("0.T 1.O 2.E 3.H");
- 682:	88 e9       	ldi	r24, 0x98	; 152
- 684:	90 e0       	ldi	r25, 0x00	; 0
- 686:	0e 94 19 02 	call	0x432	; 0x432 <lcd_msg>
+ 698:	88 e9       	ldi	r24, 0x98	; 152
+ 69a:	90 e0       	ldi	r25, 0x00	; 0
+ 69c:	0e 94 19 02 	call	0x432	; 0x432 <lcd_msg>
 	  key = waiting_for_keypress();
- 68a:	0e 94 a9 00 	call	0x152	; 0x152 <waiting_for_keypress>
- 68e:	80 93 0a 01 	sts	0x010A, r24	; 0x80010a <key>
+ 6a0:	0e 94 a9 00 	call	0x152	; 0x152 <waiting_for_keypress>
+ 6a4:	80 93 0a 01 	sts	0x010A, r24	; 0x80010a <key>
 	  switch(key)
- 692:	89 30       	cpi	r24, 0x09	; 9
- 694:	f9 f0       	breq	.+62     	; 0x6d4 <sensor+0x66>
- 696:	18 f4       	brcc	.+6      	; 0x69e <sensor+0x30>
- 698:	88 30       	cpi	r24, 0x08	; 8
- 69a:	b9 f0       	breq	.+46     	; 0x6ca <sensor+0x5c>
- 69c:	25 c0       	rjmp	.+74     	; 0x6e8 <sensor+0x7a>
- 69e:	80 31       	cpi	r24, 0x10	; 16
- 6a0:	f1 f0       	breq	.+60     	; 0x6de <sensor+0x70>
- 6a2:	83 31       	cpi	r24, 0x13	; 19
- 6a4:	09 f5       	brne	.+66     	; 0x6e8 <sensor+0x7a>
+ 6a8:	89 30       	cpi	r24, 0x09	; 9
+ 6aa:	09 f4       	brne	.+2      	; 0x6ae <sensor+0x2a>
+ 6ac:	41 c0       	rjmp	.+130    	; 0x730 <sensor+0xac>
+ 6ae:	18 f4       	brcc	.+6      	; 0x6b6 <sensor+0x32>
+ 6b0:	88 30       	cpi	r24, 0x08	; 8
+ 6b2:	e9 f0       	breq	.+58     	; 0x6ee <sensor+0x6a>
+ 6b4:	65 c0       	rjmp	.+202    	; 0x780 <sensor+0xfc>
+ 6b6:	80 31       	cpi	r24, 0x10	; 16
+ 6b8:	09 f4       	brne	.+2      	; 0x6bc <sensor+0x38>
+ 6ba:	4e c0       	rjmp	.+156    	; 0x758 <sensor+0xd4>
+ 6bc:	83 31       	cpi	r24, 0x13	; 19
+ 6be:	09 f0       	breq	.+2      	; 0x6c2 <sensor+0x3e>
+ 6c0:	5f c0       	rjmp	.+190    	; 0x780 <sensor+0xfc>
 	  {
 		  case BTN_0:
 		  sensorInstruction("PlaceYourFinger");
- 6a6:	88 ea       	ldi	r24, 0xA8	; 168
- 6a8:	90 e0       	ldi	r25, 0x00	; 0
- 6aa:	0e 94 c7 02 	call	0x58e	; 0x58e <sensorInstruction>
+ 6c2:	88 ea       	ldi	r24, 0xA8	; 168
+ 6c4:	90 e0       	ldi	r25, 0x00	; 0
+ 6c6:	0e 94 c7 02 	call	0x58e	; 0x58e <sensorInstruction>
 		  // Push The Sensor code
-		  pushSensor();
- 6ae:	0e 94 e4 02 	call	0x5c8	; 0x5c8 <pushSensor>
- 6b2:	2f ef       	ldi	r18, 0xFF	; 255
- 6b4:	83 e2       	ldi	r24, 0x23	; 35
- 6b6:	94 ef       	ldi	r25, 0xF4	; 244
- 6b8:	21 50       	subi	r18, 0x01	; 1
- 6ba:	80 40       	sbci	r24, 0x00	; 0
- 6bc:	90 40       	sbci	r25, 0x00	; 0
- 6be:	e1 f7       	brne	.-8      	; 0x6b8 <sensor+0x4a>
- 6c0:	00 c0       	rjmp	.+0      	; 0x6c2 <sensor+0x54>
- 6c2:	00 00       	nop
-		  
+		 pushSensor(TEMP_SENSOR);
+ 6ca:	80 e0       	ldi	r24, 0x00	; 0
+ 6cc:	90 e0       	ldi	r25, 0x00	; 0
+ 6ce:	0e 94 e4 02 	call	0x5c8	; 0x5c8 <pushSensor>
+ 6d2:	2f ef       	ldi	r18, 0xFF	; 255
+ 6d4:	83 e2       	ldi	r24, 0x23	; 35
+ 6d6:	94 ef       	ldi	r25, 0xF4	; 244
+ 6d8:	21 50       	subi	r18, 0x01	; 1
+ 6da:	80 40       	sbci	r24, 0x00	; 0
+ 6dc:	90 40       	sbci	r25, 0x00	; 0
+ 6de:	e1 f7       	brne	.-8      	; 0x6d8 <sensor+0x54>
+ 6e0:	00 c0       	rjmp	.+0      	; 0x6e2 <sensor+0x5e>
+ 6e2:	00 00       	nop
+		  //pushSensor(GSM_SENSOR);
 		  // Temperature Sensor Code 
 		  
 		  
 		 _delay_ms(10000);
-          pullSensor();
- 6c4:	0e 94 16 03 	call	0x62c	; 0x62c <pullSensor>
+          pushSensor(TEMP_SENSOR);
+ 6e4:	80 e0       	ldi	r24, 0x00	; 0
+ 6e6:	90 e0       	ldi	r25, 0x00	; 0
+ 6e8:	0e 94 e4 02 	call	0x5c8	; 0x5c8 <pushSensor>
+		//  pullSensor(GSM_SENSOR);
 		  break;
- 6c8:	08 95       	ret
+ 6ec:	08 95       	ret
 		  case BTN_1:
 		  sensorInstruction("PlaceYourThump");
- 6ca:	88 eb       	ldi	r24, 0xB8	; 184
- 6cc:	90 e0       	ldi	r25, 0x00	; 0
- 6ce:	0e 94 c7 02 	call	0x58e	; 0x58e <sensorInstruction>
-		//  pushSensor(OXY_SENSOR);
+ 6ee:	88 eb       	ldi	r24, 0xB8	; 184
+ 6f0:	90 e0       	ldi	r25, 0x00	; 0
+ 6f2:	0e 94 c7 02 	call	0x58e	; 0x58e <sensorInstruction>
+		  // Push The Sensor code
+		 pushSensor(OXY_SENSOR);
+ 6f6:	81 e0       	ldi	r24, 0x01	; 1
+ 6f8:	90 e0       	ldi	r25, 0x00	; 0
+ 6fa:	0e 94 e4 02 	call	0x5c8	; 0x5c8 <pushSensor>
+ 6fe:	2f ef       	ldi	r18, 0xFF	; 255
+ 700:	81 e1       	ldi	r24, 0x11	; 17
+ 702:	9a e7       	ldi	r25, 0x7A	; 122
+ 704:	21 50       	subi	r18, 0x01	; 1
+ 706:	80 40       	sbci	r24, 0x00	; 0
+ 708:	90 40       	sbci	r25, 0x00	; 0
+ 70a:	e1 f7       	brne	.-8      	; 0x704 <sensor+0x80>
+ 70c:	00 c0       	rjmp	.+0      	; 0x70e <sensor+0x8a>
+ 70e:	00 00       	nop
 		  // Oxygen Saturation Code
+		   _delay_ms(5000);
+		   pushSensor(GSM_SENSOR);
+ 710:	84 e0       	ldi	r24, 0x04	; 4
+ 712:	90 e0       	ldi	r25, 0x00	; 0
+ 714:	0e 94 e4 02 	call	0x5c8	; 0x5c8 <pushSensor>
+ 718:	2f ef       	ldi	r18, 0xFF	; 255
+ 71a:	83 e2       	ldi	r24, 0x23	; 35
+ 71c:	94 ef       	ldi	r25, 0xF4	; 244
+ 71e:	21 50       	subi	r18, 0x01	; 1
+ 720:	80 40       	sbci	r24, 0x00	; 0
+ 722:	90 40       	sbci	r25, 0x00	; 0
+ 724:	e1 f7       	brne	.-8      	; 0x71e <sensor+0x9a>
+ 726:	00 c0       	rjmp	.+0      	; 0x728 <sensor+0xa4>
+ 728:	00 00       	nop
 		  
 		 //  _delay_ms(10000);
 		//   pushSensor(OXY_SENSOR);
+		_delay_ms(10000);
+		pullSensor();
+ 72a:	0e 94 19 03 	call	0x632	; 0x632 <pullSensor>
 		  break;
- 6d2:	08 95       	ret
+ 72e:	08 95       	ret
 		  case BTN_2:
 		  sensorInstruction("PlaceYourThump");
- 6d4:	88 eb       	ldi	r24, 0xB8	; 184
- 6d6:	90 e0       	ldi	r25, 0x00	; 0
- 6d8:	0e 94 c7 02 	call	0x58e	; 0x58e <sensorInstruction>
-		  // ECG Code
+ 730:	88 eb       	ldi	r24, 0xB8	; 184
+ 732:	90 e0       	ldi	r25, 0x00	; 0
+ 734:	0e 94 c7 02 	call	0x58e	; 0x58e <sensorInstruction>
+		  // Push The Sensor code
+		pushSensor(ECG_SENSOR);
+ 738:	82 e0       	ldi	r24, 0x02	; 2
+ 73a:	90 e0       	ldi	r25, 0x00	; 0
+ 73c:	0e 94 e4 02 	call	0x5c8	; 0x5c8 <pushSensor>
+ 740:	2f ef       	ldi	r18, 0xFF	; 255
+ 742:	83 e2       	ldi	r24, 0x23	; 35
+ 744:	94 ef       	ldi	r25, 0xF4	; 244
+ 746:	21 50       	subi	r18, 0x01	; 1
+ 748:	80 40       	sbci	r24, 0x00	; 0
+ 74a:	90 40       	sbci	r25, 0x00	; 0
+ 74c:	e1 f7       	brne	.-8      	; 0x746 <sensor+0xc2>
+ 74e:	00 c0       	rjmp	.+0      	; 0x750 <sensor+0xcc>
+ 750:	00 00       	nop
 		  
 		  
 		//   _delay_ms(10000);
 		 //  pushSensor(ECG_SENSOR);
+		 _delay_ms(10000);
+		 pullSensor();
+ 752:	0e 94 19 03 	call	0x632	; 0x632 <pullSensor>
 		  break;
- 6dc:	08 95       	ret
+ 756:	08 95       	ret
 		  case BTN_3:
 		  sensorInstruction("Putitonyourchest");
- 6de:	87 ec       	ldi	r24, 0xC7	; 199
- 6e0:	90 e0       	ldi	r25, 0x00	; 0
- 6e2:	0e 94 c7 02 	call	0x58e	; 0x58e <sensorInstruction>
-		  // Heart Rate Code
+ 758:	87 ec       	ldi	r24, 0xC7	; 199
+ 75a:	90 e0       	ldi	r25, 0x00	; 0
+ 75c:	0e 94 c7 02 	call	0x58e	; 0x58e <sensorInstruction>
+		  // Push The Sensor code
+		  pushSensor(HEART_SENSOR);
+ 760:	83 e0       	ldi	r24, 0x03	; 3
+ 762:	90 e0       	ldi	r25, 0x00	; 0
+ 764:	0e 94 e4 02 	call	0x5c8	; 0x5c8 <pushSensor>
+ 768:	2f ef       	ldi	r18, 0xFF	; 255
+ 76a:	83 e2       	ldi	r24, 0x23	; 35
+ 76c:	94 ef       	ldi	r25, 0xF4	; 244
+ 76e:	21 50       	subi	r18, 0x01	; 1
+ 770:	80 40       	sbci	r24, 0x00	; 0
+ 772:	90 40       	sbci	r25, 0x00	; 0
+ 774:	e1 f7       	brne	.-8      	; 0x76e <sensor+0xea>
+ 776:	00 c0       	rjmp	.+0      	; 0x778 <sensor+0xf4>
+ 778:	00 00       	nop
 		  
 		  
 		//   _delay_ms(10000);
 		 //  pushSensor(HEART_SENSOR);
+		 _delay_ms(10000);
+		 pullSensor();
+ 77a:	0e 94 19 03 	call	0x632	; 0x632 <pullSensor>
 		  break;
- 6e6:	08 95       	ret
+ 77e:	08 95       	ret
 	      default:
 		  lcd_clear();
- 6e8:	0e 94 28 02 	call	0x450	; 0x450 <lcd_clear>
- 6ec:	2f ef       	ldi	r18, 0xFF	; 255
- 6ee:	84 e3       	ldi	r24, 0x34	; 52
- 6f0:	9c e0       	ldi	r25, 0x0C	; 12
- 6f2:	21 50       	subi	r18, 0x01	; 1
- 6f4:	80 40       	sbci	r24, 0x00	; 0
- 6f6:	90 40       	sbci	r25, 0x00	; 0
- 6f8:	e1 f7       	brne	.-8      	; 0x6f2 <sensor+0x84>
- 6fa:	00 c0       	rjmp	.+0      	; 0x6fc <sensor+0x8e>
- 6fc:	00 00       	nop
+ 780:	0e 94 28 02 	call	0x450	; 0x450 <lcd_clear>
+ 784:	2f ef       	ldi	r18, 0xFF	; 255
+ 786:	84 e3       	ldi	r24, 0x34	; 52
+ 788:	9c e0       	ldi	r25, 0x0C	; 12
+ 78a:	21 50       	subi	r18, 0x01	; 1
+ 78c:	80 40       	sbci	r24, 0x00	; 0
+ 78e:	90 40       	sbci	r25, 0x00	; 0
+ 790:	e1 f7       	brne	.-8      	; 0x78a <sensor+0x106>
+ 792:	00 c0       	rjmp	.+0      	; 0x794 <sensor+0x110>
+ 794:	00 00       	nop
 		  _delay_ms(500);
 		  lcd_msg("Wrong input");
- 6fe:	88 ed       	ldi	r24, 0xD8	; 216
- 700:	90 e0       	ldi	r25, 0x00	; 0
- 702:	0e 94 19 02 	call	0x432	; 0x432 <lcd_msg>
- 706:	2f ef       	ldi	r18, 0xFF	; 255
- 708:	89 e6       	ldi	r24, 0x69	; 105
- 70a:	98 e1       	ldi	r25, 0x18	; 24
- 70c:	21 50       	subi	r18, 0x01	; 1
- 70e:	80 40       	sbci	r24, 0x00	; 0
- 710:	90 40       	sbci	r25, 0x00	; 0
- 712:	e1 f7       	brne	.-8      	; 0x70c <sensor+0x9e>
- 714:	00 c0       	rjmp	.+0      	; 0x716 <sensor+0xa8>
- 716:	00 00       	nop
- 718:	08 95       	ret
+ 796:	88 ed       	ldi	r24, 0xD8	; 216
+ 798:	90 e0       	ldi	r25, 0x00	; 0
+ 79a:	0e 94 19 02 	call	0x432	; 0x432 <lcd_msg>
+ 79e:	2f ef       	ldi	r18, 0xFF	; 255
+ 7a0:	89 e6       	ldi	r24, 0x69	; 105
+ 7a2:	98 e1       	ldi	r25, 0x18	; 24
+ 7a4:	21 50       	subi	r18, 0x01	; 1
+ 7a6:	80 40       	sbci	r24, 0x00	; 0
+ 7a8:	90 40       	sbci	r25, 0x00	; 0
+ 7aa:	e1 f7       	brne	.-8      	; 0x7a4 <sensor+0x120>
+ 7ac:	00 c0       	rjmp	.+0      	; 0x7ae <sensor+0x12a>
+ 7ae:	00 00       	nop
+ 7b0:	08 95       	ret
 
-0000071a <main>:
+000007b2 <main>:
 
 
 int main(void)
 {
 	
 	keypad_init();
- 71a:	0e 94 5d 00 	call	0xba	; 0xba <keypad_init>
+ 7b2:	0e 94 5d 00 	call	0xba	; 0xba <keypad_init>
 	
 	i2c_init();
- 71e:	0e 94 49 01 	call	0x292	; 0x292 <i2c_init>
+ 7b6:	0e 94 49 01 	call	0x292	; 0x292 <i2c_init>
 	i2c_start();
- 722:	0e 94 4f 01 	call	0x29e	; 0x29e <i2c_start>
+ 7ba:	0e 94 4f 01 	call	0x29e	; 0x29e <i2c_start>
 	i2c_write(0x70);
- 726:	80 e7       	ldi	r24, 0x70	; 112
- 728:	0e 94 55 01 	call	0x2aa	; 0x2aa <i2c_write>
+ 7be:	80 e7       	ldi	r24, 0x70	; 112
+ 7c0:	0e 94 55 01 	call	0x2aa	; 0x2aa <i2c_write>
 	lcd_init();
- 72c:	0e 94 cc 01 	call	0x398	; 0x398 <lcd_init>
+ 7c4:	0e 94 cc 01 	call	0x398	; 0x398 <lcd_init>
 	
 	lcd_clear();			/* Clear LCD */
- 730:	0e 94 28 02 	call	0x450	; 0x450 <lcd_clear>
- 734:	2f ef       	ldi	r18, 0xFF	; 255
- 736:	89 e6       	ldi	r24, 0x69	; 105
- 738:	98 e1       	ldi	r25, 0x18	; 24
- 73a:	21 50       	subi	r18, 0x01	; 1
- 73c:	80 40       	sbci	r24, 0x00	; 0
- 73e:	90 40       	sbci	r25, 0x00	; 0
- 740:	e1 f7       	brne	.-8      	; 0x73a <main+0x20>
- 742:	00 c0       	rjmp	.+0      	; 0x744 <main+0x2a>
- 744:	00 00       	nop
+ 7c8:	0e 94 28 02 	call	0x450	; 0x450 <lcd_clear>
+ 7cc:	2f ef       	ldi	r18, 0xFF	; 255
+ 7ce:	89 e6       	ldi	r24, 0x69	; 105
+ 7d0:	98 e1       	ldi	r25, 0x18	; 24
+ 7d2:	21 50       	subi	r18, 0x01	; 1
+ 7d4:	80 40       	sbci	r24, 0x00	; 0
+ 7d6:	90 40       	sbci	r25, 0x00	; 0
+ 7d8:	e1 f7       	brne	.-8      	; 0x7d2 <main+0x20>
+ 7da:	00 c0       	rjmp	.+0      	; 0x7dc <main+0x2a>
+ 7dc:	00 00       	nop
 	_delay_ms(1000);
 	lcd_1stline();
- 746:	0e 94 2c 02 	call	0x458	; 0x458 <lcd_1stline>
+ 7de:	0e 94 2c 02 	call	0x458	; 0x458 <lcd_1stline>
 	lcd_msg("WELCOME...." );
- 74a:	84 ee       	ldi	r24, 0xE4	; 228
- 74c:	90 e0       	ldi	r25, 0x00	; 0
- 74e:	0e 94 19 02 	call	0x432	; 0x432 <lcd_msg>
- 752:	2f e7       	ldi	r18, 0x7F	; 127
- 754:	84 e8       	ldi	r24, 0x84	; 132
- 756:	9e e1       	ldi	r25, 0x1E	; 30
- 758:	21 50       	subi	r18, 0x01	; 1
- 75a:	80 40       	sbci	r24, 0x00	; 0
- 75c:	90 40       	sbci	r25, 0x00	; 0
- 75e:	e1 f7       	brne	.-8      	; 0x758 <main+0x3e>
- 760:	00 c0       	rjmp	.+0      	; 0x762 <main+0x48>
- 762:	00 00       	nop
+ 7e2:	84 ee       	ldi	r24, 0xE4	; 228
+ 7e4:	90 e0       	ldi	r25, 0x00	; 0
+ 7e6:	0e 94 19 02 	call	0x432	; 0x432 <lcd_msg>
+ 7ea:	2f e7       	ldi	r18, 0x7F	; 127
+ 7ec:	84 e8       	ldi	r24, 0x84	; 132
+ 7ee:	9e e1       	ldi	r25, 0x1E	; 30
+ 7f0:	21 50       	subi	r18, 0x01	; 1
+ 7f2:	80 40       	sbci	r24, 0x00	; 0
+ 7f4:	90 40       	sbci	r25, 0x00	; 0
+ 7f6:	e1 f7       	brne	.-8      	; 0x7f0 <main+0x3e>
+ 7f8:	00 c0       	rjmp	.+0      	; 0x7fa <main+0x48>
+ 7fa:	00 00       	nop
 	_delay_ms(1250);
 	lcd_2ndline();
- 764:	0e 94 30 02 	call	0x460	; 0x460 <lcd_2ndline>
+ 7fc:	0e 94 30 02 	call	0x460	; 0x460 <lcd_2ndline>
 	lcd_msg("Mobile Medi Box");
- 768:	80 ef       	ldi	r24, 0xF0	; 240
- 76a:	90 e0       	ldi	r25, 0x00	; 0
- 76c:	0e 94 19 02 	call	0x432	; 0x432 <lcd_msg>
- 770:	2f ef       	ldi	r18, 0xFF	; 255
- 772:	8e e9       	ldi	r24, 0x9E	; 158
- 774:	94 e2       	ldi	r25, 0x24	; 36
- 776:	21 50       	subi	r18, 0x01	; 1
- 778:	80 40       	sbci	r24, 0x00	; 0
- 77a:	90 40       	sbci	r25, 0x00	; 0
- 77c:	e1 f7       	brne	.-8      	; 0x776 <main+0x5c>
- 77e:	00 c0       	rjmp	.+0      	; 0x780 <main+0x66>
- 780:	00 00       	nop
+ 800:	80 ef       	ldi	r24, 0xF0	; 240
+ 802:	90 e0       	ldi	r25, 0x00	; 0
+ 804:	0e 94 19 02 	call	0x432	; 0x432 <lcd_msg>
+ 808:	2f ef       	ldi	r18, 0xFF	; 255
+ 80a:	8e e9       	ldi	r24, 0x9E	; 158
+ 80c:	94 e2       	ldi	r25, 0x24	; 36
+ 80e:	21 50       	subi	r18, 0x01	; 1
+ 810:	80 40       	sbci	r24, 0x00	; 0
+ 812:	90 40       	sbci	r25, 0x00	; 0
+ 814:	e1 f7       	brne	.-8      	; 0x80e <__DATA_REGION_LENGTH__+0xe>
+ 816:	00 c0       	rjmp	.+0      	; 0x818 <__DATA_REGION_LENGTH__+0x18>
+ 818:	00 00       	nop
 	_delay_ms(1500);
 	 lcd_clear();
- 782:	0e 94 28 02 	call	0x450	; 0x450 <lcd_clear>
- 786:	2f ef       	ldi	r18, 0xFF	; 255
- 788:	84 e3       	ldi	r24, 0x34	; 52
- 78a:	9c e0       	ldi	r25, 0x0C	; 12
- 78c:	21 50       	subi	r18, 0x01	; 1
- 78e:	80 40       	sbci	r24, 0x00	; 0
- 790:	90 40       	sbci	r25, 0x00	; 0
- 792:	e1 f7       	brne	.-8      	; 0x78c <main+0x72>
- 794:	00 c0       	rjmp	.+0      	; 0x796 <main+0x7c>
- 796:	00 00       	nop
+ 81a:	0e 94 28 02 	call	0x450	; 0x450 <lcd_clear>
+ 81e:	2f ef       	ldi	r18, 0xFF	; 255
+ 820:	84 e3       	ldi	r24, 0x34	; 52
+ 822:	9c e0       	ldi	r25, 0x0C	; 12
+ 824:	21 50       	subi	r18, 0x01	; 1
+ 826:	80 40       	sbci	r24, 0x00	; 0
+ 828:	90 40       	sbci	r25, 0x00	; 0
+ 82a:	e1 f7       	brne	.-8      	; 0x824 <__DATA_REGION_LENGTH__+0x24>
+ 82c:	00 c0       	rjmp	.+0      	; 0x82e <__DATA_REGION_LENGTH__+0x2e>
+ 82e:	00 00       	nop
 
 	
 	//while (1)
 	//{
 		
      	getAge();                         // For Getting Age
- 798:	0e 94 34 02 	call	0x468	; 0x468 <getAge>
+ 830:	0e 94 34 02 	call	0x468	; 0x468 <getAge>
 		getGender();                      // For Getting Gender
- 79c:	0e 94 8c 02 	call	0x518	; 0x518 <getGender>
+ 834:	0e 94 8c 02 	call	0x518	; 0x518 <getGender>
 	    sensor();                         // For Sensor Selection And Functions
- 7a0:	0e 94 37 03 	call	0x66e	; 0x66e <sensor>
+ 838:	0e 94 42 03 	call	0x684	; 0x684 <sensor>
 	//}
 	
 }
- 7a4:	80 e0       	ldi	r24, 0x00	; 0
- 7a6:	90 e0       	ldi	r25, 0x00	; 0
- 7a8:	08 95       	ret
+ 83c:	80 e0       	ldi	r24, 0x00	; 0
+ 83e:	90 e0       	ldi	r25, 0x00	; 0
+ 840:	08 95       	ret
 
-000007aa <__tablejump2__>:
- 7aa:	ee 0f       	add	r30, r30
- 7ac:	ff 1f       	adc	r31, r31
- 7ae:	05 90       	lpm	r0, Z+
- 7b0:	f4 91       	lpm	r31, Z
- 7b2:	e0 2d       	mov	r30, r0
- 7b4:	09 94       	ijmp
+00000842 <__tablejump2__>:
+ 842:	ee 0f       	add	r30, r30
+ 844:	ff 1f       	adc	r31, r31
+ 846:	05 90       	lpm	r0, Z+
+ 848:	f4 91       	lpm	r31, Z
+ 84a:	e0 2d       	mov	r30, r0
+ 84c:	09 94       	ijmp
 
-000007b6 <_exit>:
- 7b6:	f8 94       	cli
+0000084e <_exit>:
+ 84e:	f8 94       	cli
 
-000007b8 <__stop_program>:
- 7b8:	ff cf       	rjmp	.-2      	; 0x7b8 <__stop_program>
+00000850 <__stop_program>:
+ 850:	ff cf       	rjmp	.-2      	; 0x850 <__stop_program>
