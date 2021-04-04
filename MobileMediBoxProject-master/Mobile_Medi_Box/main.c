@@ -37,8 +37,8 @@ void sensor();
 void sensorInstruction(char *c);
 
 
-void pushSensor(int n);
-void pullSensor(int n);
+void pushSensor();
+void pullSensor();
 
 
 int main(void)
@@ -52,15 +52,15 @@ int main(void)
 	lcd_init();
 	
 	lcd_clear();			/* Clear LCD */
-	_delay_ms(100);
+	_delay_ms(1000);
 	lcd_1stline();
 	lcd_msg("WELCOME...." );
-	_delay_ms(50);
+	_delay_ms(1250);
 	lcd_2ndline();
 	lcd_msg("Mobile Medi Box");
-	_delay_ms(150);
+	_delay_ms(1500);
 	 lcd_clear();
-	_delay_ms(50);
+	_delay_ms(500);
 
 
 	
@@ -80,15 +80,16 @@ void getAge()
 {
 	
 	lcd_clear();
+	_delay_ms(500);
 	lcd_msg("AGE: ");
-	_delay_ms(100);
+	_delay_ms(1000);
 	lcd_2ndline();
 	while(1){
 		key = waiting_for_keypress();
 		
 		 if (key == BTN_OK) {
 			 age = num;
-			 _delay_ms(50);
+			 _delay_ms(500);
 			 break;
 		 }
 		
@@ -96,7 +97,7 @@ void getAge()
 		num *= 10;      // num = 0 initial value
 		num += keypad_get_number(key)-48;
 		
-		delay(500);
+		delay(10000);
 	}
 	
 }
@@ -105,14 +106,15 @@ void getAge()
   void getGender()
   {
 	  lcd_clear();
+	  _delay_ms(500);
 	  lcd_msg("Gender: ");
 	  lcd_2ndline();
 	  lcd_msg("0.Male 1.Female");
 	  key = waiting_for_keypress();
-	  delay(500);
+	  delay(10000);
 	  if (key == BTN_0) gender = 0;
 	  if (key == BTN_1) gender = 1;
-	  _delay_ms(50);
+	  _delay_ms(500);
 	  lcd_clear();
   }
   
@@ -120,6 +122,7 @@ void getAge()
   
   void sensor()
   {
+	  delay(500);
 	  lcd_msg("Select: ");
 	  lcd_2ndline();
 	  lcd_msg("0.T 1.O 2.E 3.H");
@@ -127,15 +130,15 @@ void getAge()
 	  switch(key)
 	  {
 		  case BTN_0:
-		  sensorInstruction("Place Your Finger");
+		  sensorInstruction("PlaceYourFinger");
 		  // Push The Sensor code
-		//  pushSensor(TEMP_SENSOR);
+		  pushSensor();
 		  
 		  // Temperature Sensor Code 
 		  
 		  
-		//  _delay_ms(10000);
-//		  pushSensor(TEMP_SENSOR);
+		 _delay_ms(10000);
+          pullSensor();
 		  break;
 		  case BTN_1:
 		  sensorInstruction("PlaceYourThump");
@@ -170,8 +173,9 @@ void getAge()
 		  break;
 	      default:
 		  lcd_clear();
+		  _delay_ms(500);
 		  lcd_msg("Wrong input");
-		  _delay_ms(100);
+		  _delay_ms(1000);
 		 //continue;
 		  break;
 	  }
@@ -180,54 +184,56 @@ void getAge()
   void sensorInstruction(char *c)
   {
 	  lcd_clear();
+	   _delay_ms(750);
 	  lcd_msg(c);
-	  _delay_ms(50);
+	  _delay_ms(500);
   }
   
   
 
   
-  /*
-  
-  void pushSensor(int n)
+	  
+
+  void pushSensor()
   {
-	 PORTD = n;
-	 DDRD |= 0b00100011;
-     TCCR1A |= 1<<WGM11 | 1<<COM1A1;
-     TCCR1B |= 1<<WGM13 | 1<<WGM12 | 1<<CS10 | 1<<CS11;
-     ICR1 = 2499;
+	DDRD = 0b00111100;
+	PORTD = 0b00001100;
+	
+	//Configure TIMER1
+	TCCR1A|=(1<<COM1A1)|(1<<COM1B1)|(1<<WGM11);        //NON Inverted PWM
+	TCCR1B|=(1<<WGM13)|(1<<WGM12)|(1<<CS11)|(1<<CS10); //PRESCALER=64 MODE 14(FAST PWM)
 
-     OCR1A = 65;	/* Set servo shaft at -90° position */
-	 /*
-    _delay_ms(1500);
-     OCR1A = 175;	/* Set servo shaft at 0° position */
-	 /*
-    _delay_ms(1500);
-     OCR1A = 300;	/* Set servo at +90° position */
-	 /*
-    _delay_ms(1500);
-	  
+	ICR1=4999;  //fPWM=50Hz (Period = 20ms Standard).
+
+	DDRD|=(1<<PD4)|(1<<PD5);   //PWM Pins as Out
+
+		OCR1A=97;   //0 degree
+		delay(500);
+
+		OCR1A=316;  //90 degree
+		delay(500);
+
+		OCR1A=425;  //135 degree
+		delay(500);
+
+		OCR1A=535;  //180 degree
+		delay(500);
   }
-
-  void pullSensor(int n)
-  {
-	  
-	  PORTD = n;
-	  DDRD |= 0b00100011;
-	  TCCR1A |= 1<<WGM11 | 1<<COM1A1;
-	  TCCR1B |= 1<<WGM13 | 1<<WGM12 | 1<<CS10 | 1<<CS11;
-	  ICR1 = 2499;
-
-	  OCR1A = 65;	/* Set servo shaft at -90° position */
-	  /*
-	  _delay_ms(1500);
-	  
-  }
-  
-  */
 	  
 	  
 	  
-	  
-	  
-	 
+void pullSensor()
+{
+	OCR1A=535;  //180 degree
+	delay(500);
+	
+	OCR1A=425;  //135 degree
+	delay(500);
+	
+	
+	OCR1A=316;  //90 degree
+	delay(500);
+	
+	OCR1A=97;   //0 degree
+	delay(500);
+}
