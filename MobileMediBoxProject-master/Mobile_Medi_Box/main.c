@@ -53,15 +53,14 @@ int main(void)
 	lcd_init();
 	
 	lcd_clear();			/* Clear LCD */
-	_delay_ms(1000);
+	_delay_ms(200);
 	lcd_1stline();
 	lcd_msg("WELCOME...." );
-	_delay_ms(1250);
+	_delay_ms(1000);
 	lcd_2ndline();
 	lcd_msg("Mobile Medi Box");
-	_delay_ms(1500);
-	 lcd_clear();
-	_delay_ms(500);
+	_delay_ms(1000);
+
 
 
 	
@@ -83,7 +82,7 @@ void getAge()
 	lcd_clear();
 	_delay_ms(500);
 	lcd_msg("AGE: ");
-	_delay_ms(1000);
+	_delay_ms(500);
 	lcd_2ndline();
 	while(1){
 		key = waiting_for_keypress();
@@ -98,7 +97,7 @@ void getAge()
 		num *= 10;      // num = 0 initial value
 		num += keypad_get_number(key)-48;
 		
-		delay(10000);
+		delay(8500);
 	}
 	
 }
@@ -112,10 +111,8 @@ void getAge()
 	  lcd_2ndline();
 	  lcd_msg("0.Male 1.Female");
 	  key = waiting_for_keypress();
-	  delay(10000);
 	  if (key == BTN_0) gender = 0;
 	  if (key == BTN_1) gender = 1;
-	  _delay_ms(500);
 	  lcd_clear();
   }
   
@@ -123,7 +120,7 @@ void getAge()
   
   void sensor()
   {
-	  delay(500);
+	   _delay_ms(750);
 	  lcd_msg("Select: ");
 	  lcd_2ndline();
 	  lcd_msg("0.T 1.O 2.E 3.H");
@@ -207,36 +204,27 @@ void getAge()
 
   void pushSensor(int n)
   {
-	
-	  DDRD = (1<<PD5);	/* Make OC1A pin as output */
-	  PORTD = n;
 	  
-	  TCNT1 = 0;		/* Set timer1 count zero */
-	  ICR1 = 2499;		/* Set TOP count for timer1 in ICR1 register */
+	 PORTD = n; 
+	  
+	 //Configure TIMER1
+	 TCCR1A|=(1<<COM1A1)|(1<<COM1B1)|(1<<WGM11);        //NON Inverted PWM
+	 TCCR1B|=(1<<WGM13)|(1<<WGM12)|(1<<CS11)|(1<<CS10); //PRESCALER=64 MODE 14(FAST PWM)
 
-	  /* Set Fast PWM, TOP in ICR1, Clear OC1A on compare match, clk/64 */
-          TCCR1A = (1<<WGM11)|(1<<COM1A1);
-	      TCCR1B = (1<<WGM12)|(1<<WGM13)|(1<<CS10)|(1<<CS11);
-	  
-		  OCR1A = 65;	/* Set servo shaft at 0° position */
-		  _delay_ms(1500);
-		  OCR1A = 175;	/* Set servo shaft at 90° position */
-		  _delay_ms(1500);
-		  OCR1A = 300;	/* Set servo at +180° position */
-		  _delay_ms(1500);
+	 ICR1=4999;  //fPWM=50Hz (Period = 20ms Standard).
+
+	 DDRD|=(1<<PD4)|(1<<PD5);   //PWM Pins as Out
+
+
+	 OCR1A=500;  //180 degree
+		  
   }
-	  
+  
 
 	  
 	  
 void pullSensor(int n)
 {
-	  PORTD = n;
-
-	  OCR1A = 300;	/* Set servo at +180° position */
-	  _delay_ms(1500);
-	  OCR1A = 175;	/* Set servo shaft at 90° position */
-	 _delay_ms(1500);
-	  OCR1A = 65;	/* Set servo shaft at 0° position */
-	  _delay_ms(1500);
+	 PORTD = n;
+	 OCR1A=249;   //0 degree
 }
