@@ -20,13 +20,16 @@
 #define OXY_SENSOR 0b00000001
 #define HEART_SENSOR 0b00000011
 #define ECG_SENSOR 0b00000010
-#define GSM_SENSOR 0b00000100
-#define MEDI_BOX 0b01000101
+#define MEDI_BOX1 0b00000100
+#define MEDI_BOX2 0b00000101
+#define MEDI_BOX3 0b00000110
 
 
 int age = 0;  // Age
 int gender = 0;  // Gender
 int num = 0;
+char *p_number;
+
 
 char key;
 
@@ -36,6 +39,7 @@ void getAge();
 void getGender();
 void sensor();
 void sensorInstruction(char *c);
+void getPhoneNumber();
 
 
 void pushSensor();
@@ -69,6 +73,7 @@ int main(void)
 		
      	getAge();                         // For Getting Age
 		getGender();                      // For Getting Gender
+		getPhoneNumber();
 	    sensor();                         // For Sensor Selection And Functions
 	//}
 	
@@ -116,6 +121,25 @@ void getAge()
 	  lcd_clear();
   }
   
+  
+   void getPhoneNumber()
+   {
+	   int n = 0;
+	   _delay_ms(500);
+	   lcd_msg("Phone Number: ");
+	   lcd_2ndline();
+	   while(1){
+		   if (n == 10) break;
+	       key = waiting_for_keypress();
+		   lcd_dwr(keypad_get_number(key));
+	       p_number[n] = key;
+		   delay(8500);
+	       n++;
+	   }
+	  
+	   lcd_clear();
+	   _delay_ms(50);
+   }
  
   
   void sensor()
@@ -136,8 +160,8 @@ void getAge()
 		  // Temperature Sensor Code 
 		  
 		  
-		 _delay_ms(10000);
-          pullSensor(TEMP_SENSOR);
+		 //_delay_ms(10000);
+        //  pullSensor(TEMP_SENSOR);
 		//  pullSensor(GSM_SENSOR);
 		  break;
 		  case BTN_1:
@@ -150,8 +174,8 @@ void getAge()
 		  
 		 //  _delay_ms(10000);
 		//   pushSensor(OXY_SENSOR);
-		_delay_ms(10000);
-		pullSensor(OXY_SENSOR);
+	//	_delay_ms(10000);
+	//	pullSensor(OXY_SENSOR);
 		  break;
 		  case BTN_2:
 		  sensorInstruction("PlaceYourThump");
@@ -161,10 +185,10 @@ void getAge()
 		  // ECG Code
 		  
 		  
-		 _delay_ms(10000);
+	//	 _delay_ms(10000);
 		 // pushSensor(ECG_SENSOR);
 		 //_delay_ms(10000);
-		 pullSensor(ECG_SENSOR);
+	//	 pullSensor(ECG_SENSOR);
 		  break;
 		  case BTN_3:
 		  sensorInstruction("Putitonyourchest");
@@ -176,8 +200,8 @@ void getAge()
 		  
 		// _delay_ms(10000);
 		// pushSensor(HEART_SENSOR);
-		 _delay_ms(10000);
-		 pullSensor(HEART_SENSOR);
+	//	 _delay_ms(10000);
+	//	 pullSensor(HEART_SENSOR);
 		  break;
 	      default:
 		  lcd_clear();

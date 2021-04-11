@@ -13,6 +13,7 @@ Allocating common symbols
 Common symbol       size              file
 
 key                 0x1               main.o
+p_number            0x2               main.o
 
 Discarded input sections
 
@@ -353,16 +354,19 @@ END GROUP
  .text.getGender
                 0x00000518       0x56 main.o
                 0x00000518                getGender
+ .text.getPhoneNumber
+                0x0000056e       0x76 main.o
+                0x0000056e                getPhoneNumber
  .text.sensorInstruction
-                0x0000056e       0x3a main.o
-                0x0000056e                sensorInstruction
+                0x000005e4       0x3a main.o
+                0x000005e4                sensorInstruction
  .text.pushSensor
-                0x000005a8       0x26 main.o
-                0x000005a8                pushSensor
- .text.sensor   0x000005ce      0x136 main.o
-                0x000005ce                sensor
- .text.main     0x00000704       0x7a main.o
-                0x00000704                main
+                0x0000061e       0x26 main.o
+                0x0000061e                pushSensor
+ .text.sensor   0x00000644       0xbc main.o
+                0x00000644                sensor
+ .text.main     0x00000700       0x7e main.o
+                0x00000700                main
  .text.libgcc   0x0000077e        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_tablejump2.o)
                 0x0000077e                __tablejump2__
                 0x0000078a                . = ALIGN (0x2)
@@ -392,7 +396,7 @@ END GROUP
  *(.fini0)
                 0x0000078e                _etext = .
 
-.data           0x00800060       0xa0 load address 0x0000078e
+.data           0x00800060       0xb0 load address 0x0000078e
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -403,38 +407,40 @@ END GROUP
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x00800070       0x90 main.o
+                0x00800070       0x9f main.o
  *(.gnu.linkonce.r*)
-                0x00800100                . = ALIGN (0x2)
-                0x00800100                _edata = .
-                0x00800100                PROVIDE (__data_end, .)
+                0x00800110                . = ALIGN (0x2)
+ *fill*         0x0080010f        0x1 
+                0x00800110                _edata = .
+                0x00800110                PROVIDE (__data_end, .)
 
-.bss            0x00800100        0xb
-                0x00800100                PROVIDE (__bss_start, .)
+.bss            0x00800110        0xd
+                0x00800110                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
- .bss.num       0x00800100        0x2 main.o
-                0x00800100                num
- .bss.gender    0x00800102        0x2 main.o
-                0x00800102                gender
- .bss.age       0x00800104        0x2 main.o
-                0x00800104                age
- .bss.x         0x00800106        0x2 main.o
-                0x00800106                x
- .bss.r1        0x00800108        0x2 main.o
-                0x00800108                r1
+ .bss.num       0x00800110        0x2 main.o
+                0x00800110                num
+ .bss.gender    0x00800112        0x2 main.o
+                0x00800112                gender
+ .bss.age       0x00800114        0x2 main.o
+                0x00800114                age
+ .bss.x         0x00800116        0x2 main.o
+                0x00800116                x
+ .bss.r1        0x00800118        0x2 main.o
+                0x00800118                r1
  *(COMMON)
- COMMON         0x0080010a        0x1 main.o
-                0x0080010a                key
-                0x0080010b                PROVIDE (__bss_end, .)
+ COMMON         0x0080011a        0x3 main.o
+                0x0080011a                key
+                0x0080011b                p_number
+                0x0080011d                PROVIDE (__bss_end, .)
                 0x0000078e                __data_load_start = LOADADDR (.data)
-                0x0000082e                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000083e                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x0080010b        0x0
+.noinit         0x0080011d        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x0080010b                _end = .
+                0x0080011d                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -499,42 +505,42 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0xf0
+.debug_aranges  0x00000000       0xf8
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0xf0 main.o
+                0x00000000       0xf8 main.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x1234
+.debug_info     0x00000000     0x11e3
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x4e6 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5/crtatmega32.o
- .debug_info    0x000004e6      0xd4e main.o
+ .debug_info    0x000004e6      0xcfd main.o
 
-.debug_abbrev   0x00000000      0x6da
+.debug_abbrev   0x00000000      0x6c0
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x4a3 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5/crtatmega32.o
- .debug_abbrev  0x000004a3      0x237 main.o
+ .debug_abbrev  0x000004a3      0x21d main.o
 
-.debug_line     0x00000000      0x946
+.debug_line     0x00000000      0x972
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000       0x1a c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5/crtatmega32.o
- .debug_line    0x0000001a      0x92c main.o
+ .debug_line    0x0000001a      0x958 main.o
 
-.debug_frame    0x00000000      0x220
+.debug_frame    0x00000000      0x23c
  *(.debug_frame)
- .debug_frame   0x00000000      0x220 main.o
+ .debug_frame   0x00000000      0x23c main.o
 
-.debug_str      0x00000000      0x46b
+.debug_str      0x00000000      0x483
  *(.debug_str)
  .debug_str     0x00000000      0x196 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5/crtatmega32.o
- .debug_str     0x00000196      0x2d5 main.o
-                                0x30e (size before relaxing)
+ .debug_str     0x00000196      0x2ed main.o
+                                0x326 (size before relaxing)
 
-.debug_loc      0x00000000      0x8e4
+.debug_loc      0x00000000      0x857
  *(.debug_loc)
- .debug_loc     0x00000000      0x8e4 main.o
+ .debug_loc     0x00000000      0x857 main.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -554,9 +560,9 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0xe0
+.debug_ranges   0x00000000       0xe8
  *(.debug_ranges)
- .debug_ranges  0x00000000       0xe0 main.o
+ .debug_ranges  0x00000000       0xe8 main.o
 
 .debug_macro
  *(.debug_macro)
